@@ -74,7 +74,7 @@ app.get('/protected', function(req, res) {
 
 
 app.get('/login', LoginController.login);
-app.get('/users', renewToken({kcConfig}), UserController.createUser);
+app.post('/users', renewToken({kcConfig}), UserController.createUser);
 app.get('/users', UserController.listUsers);
 app.get('/users/:id', UserController.listUserById);
 app.put('/users/:id', UserController.updateUser);
