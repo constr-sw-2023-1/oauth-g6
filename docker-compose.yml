@@ -19,3 +19,16 @@ services:
       - grupo-06-keycloak-data:/opt/jboss/keycloak/standalone/data
     networks:
       - grupo-06
+
+  # Node.js
+  node:
+    container_name: node
+    image: node:latest
+    volumes:
+      - ./app:/app
+    ports:
+      - 3000:3000
+    working_dir: /app
+    command: sh -c "npm install && npm run dev-docker"
+    networks:
+      - grupo-06
