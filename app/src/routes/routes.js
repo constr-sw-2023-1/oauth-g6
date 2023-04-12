@@ -32,7 +32,6 @@ const checkTokenExpiration = async (req, res, next) => {
 
     const decoded = jwt.decode(token);
     if (decoded.exp < Date.now() / 1000) {
-          console.log(req.session)
         const refreshToken = req.session.refresh_token;
         if (!refreshToken) {
             //change to json response

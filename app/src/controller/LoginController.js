@@ -25,9 +25,16 @@ function login(req, res) {
             res.status(500).send('Erro ao fazer login');
             return;
         }
-        req.session.token = JSON.parse(body).access_token;
-        req.session.refresh_token = JSON.parse(body).refresh_token;
-        res.redirect('/protected');
+        const data = JSON.parse(body);
+        req.session.token = data.access_token;
+        req.session.refresh_token = data.refresh_token;
+        res.status(200).send({
+            token_type: data.token_type,
+            access_token: data.access_token,
+            expires_in: data.expires_in,
+            refresh_token: data.refresh_token,
+            referesh_expires_in: data.referesh_expires_in
+        });
     });
 }
 

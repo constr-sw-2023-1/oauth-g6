@@ -1,7 +1,6 @@
 const request = require('request');
 const kcConfig = require('../config/keyCloack');
 const user = require('../mocks/user');
-const keycloakAdminClient = require('keycloak-admin-client');
 
 function createUser(req, res) {
     const options = {
@@ -21,9 +20,7 @@ function createUser(req, res) {
         }
         console.log('HTTP response code:', response.statusCode);
         try {
-            res.status(200).send({
-                message: "User created successfully",
-            });
+            res.status(200).send(JSON.parse(body));
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: 'Internal Server Error' });
@@ -46,10 +43,7 @@ function listUsers(req, res) {
         }
         console.log('HTTP response code:', response.statusCode);
         try {
-            res.status(200).send({
-                message: "List users",
-                users: JSON.parse(body)
-            });
+            res.status(200).send(JSON.parse(body));
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: 'Internal Server Error' });
@@ -74,9 +68,7 @@ function listUserById(req, res) {
         }
         console.log('HTTP response code:', response.statusCode);
         try {
-            res.status(200).send({
-                message: "User created successfully",
-            });
+            res.status(200).send(JSON.parse(body));
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: 'Internal Server Error' });
@@ -137,9 +129,7 @@ function resetPassword(req, res) {
         }
         console.log('HTTP response code:', response.statusCode);
         try {
-            res.status(200).send({
-                message: "User created successfully",
-            });
+            res.status(200).send(JSON.parse(body));
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: 'Internal Server Error' });
@@ -163,9 +153,7 @@ function deleteUser(req, res) {
         }
         console.log('HTTP response code:', response.statusCode);
         try {
-            res.status(200).send({
-                message: "User created successfully",
-            });
+            res.status(200).send();
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: 'Internal Server Error' });
