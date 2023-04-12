@@ -15,6 +15,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.17.1",
     "express-session": "^1.17.3",
+    "keycloak-admin-client": "^0.12.0",
     "keycloak-connect": "^21.0.2",
     "qs": "^6.11.1",
     "request": "^2.88.2"
