@@ -1,26 +1,27 @@
 const express = require('express');
 const session = require('express-session');
-const Keycloak = require('keycloak-connect');
 const jwt = require('jsonwebtoken');
 const request = require('request');
 const kcConfig = require("../config/keyCloack");
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const LoginController = require('../controller/LoginController');
 const UserController = require('../controller/UserController');
+const bodyParser = require('body-parser');
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 const memoryStore = new session.MemoryStore();
+
 app.use(session({
     secret: 'seu-secret',
     resave: false,
     saveUninitialized: true,
     store: memoryStore
 }));
-
-
-const keycloak = new Keycloak({ store: memoryStore }, kcConfig);
-
-app.use(keycloak.middleware());
 
 const checkTokenExpiration = async (req, res, next) => {
     const token = req.session.token;
@@ -65,20 +66,31 @@ const checkTokenExpiration = async (req, res, next) => {
     }
 };
 
+const options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Sua API',
+            version: '1.0.0',
+            description: 'Descrição da sua API'
+        },
+        servers: [
+            {
+                url: 'http://localhost:3000',
+                description: 'Servidor local'
+            }
+        ]
+    },
+    apis: ['./routes/*.js'] // Caminho dos arquivos que contêm as rotas da API
+};
+
+const specs = swaggerJsdoc(options);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.get('/', (req, res) => {
     res.send('Bem-vindo à minha API!');
 });
-
-app.get('/protected', function(req, res) {
-    const token = req.session.token;
-    if (!token) {
-        res.status(401).send('Não autorizado');
-        return;
-    }
-    res.send('Olá , seu token é: ' + token);
-});
-
-app.get('/login',  LoginController.login);
+app.post('/login',  LoginController.login);
 app.post('/users', checkTokenExpiration, UserController.createUser);
 app.get('/users', checkTokenExpiration, UserController.listUsers);
 app.get('/users/:id', checkTokenExpiration ,UserController.listUserById);

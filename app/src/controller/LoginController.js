@@ -4,6 +4,8 @@ const kcConfig = require('../config/keyCloack');
 
 function login(req, res) {
     const url = `${kcConfig.serverUrl}/realms/${kcConfig.realm}/protocol/openid-connect/token`;
+
+    const {username, password} = req.body;
     const options = {
         method: 'POST',
         url,
@@ -14,18 +16,23 @@ function login(req, res) {
             grant_type: 'password',
             client_id: kcConfig.clientId,
             client_secret: kcConfig.credentials.secret,
-            username: 'douglas',
-            password: '12345678'
+            username: username,
+            password: password
         }
     };
 
     request(options, (err, response, body) => {
         if (err) {
             console.error(err);
-            res.status(500).send('Erro ao fazer login');
+            res.status(500).send({message: 'Erro ao fazer login'});
             return;
         }
         const data = JSON.parse(body);
+        if (data.error) {
+            res.status(401).send({message: 'Usuário ou senha inválidos'});
+            return;
+        }
+
         req.session.token = data.access_token;
         req.session.refresh_token = data.refresh_token;
         res.status(200).send({
