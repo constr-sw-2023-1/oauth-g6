@@ -23,13 +23,12 @@ function login(req, res) {
 
     request(options, (err, response, body) => {
         if (err) {
-            console.error(err);
             res.status(500).send({message: 'Erro ao fazer login'});
             return;
         }
         const data = JSON.parse(body);
-        if (data.error) {
-            res.status(401).send({message: 'Usuário ou senha inválidos'});
+        if (data.error === 'invalid_grant') {
+            res.status(response.statusCode).send({errorMessage: data.errorMessage});
             return;
         }
 

@@ -27,7 +27,7 @@ const checkTokenExpiration = async (req, res, next) => {
     const token = req.session.token;
 
     if (!token) {
-        res.status(401).send('Não autorizado');
+        res.status(401).send({ error: 'Não autorizado' });
         return;
     }
 
@@ -35,7 +35,6 @@ const checkTokenExpiration = async (req, res, next) => {
     if (decoded.exp < Date.now() / 1000) {
         const refreshToken = req.session.refresh_token;
         if (!refreshToken) {
-            //change to json response
             res.status(401).send({ error: 'Não autorizado' });
             return;
         }
@@ -49,11 +48,11 @@ const checkTokenExpiration = async (req, res, next) => {
             }
         }, function(err, response, body) {
             if (err) {
-                res.status(500).send('Erro ao renovar o token');
+                res.status(500).send({ error: 'Erro ao renovar o token' });
             }
 
             if (response.statusCode !== 200) {
-                res.status(500).send('Erro ao renovar o token');
+                res.status(500).send({ error: 'Erro ao renovar o token' });
             }
 
             const tokenData = JSON.parse(body);
