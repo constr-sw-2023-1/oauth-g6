@@ -51,7 +51,6 @@ function listUsers(req, res) {
     });
 }
 
-
 function listUserById(req, res) {
     const options = {
         url: `${kcConfig.serverUrl}/admin/realms/${kcConfig.realm}/users/${req.params.id}`,
@@ -103,7 +102,6 @@ function updateUser(req, res) {
         }
     });
 }
-
 function resetPassword(req, res) {
     const options = {
         url: `${kcConfig.serverUrl}/admin/realms/${kcConfig.realm}/users/${req.params.id}/reset-password`,

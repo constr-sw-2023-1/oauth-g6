@@ -13,5 +13,5 @@ module.exports = {
             }
         ]
     },
-    apis: ['./src/routes/*.js', './src/mocks/*.js', './src/controller/*.js']
+    apis: ['./src/routes/*.js', './src/mocks/*.js', './src/controller/*.js', 'src/docs/*.js']
 };
